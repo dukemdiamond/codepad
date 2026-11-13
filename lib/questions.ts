@@ -12,10 +12,12 @@ export type Question = {
   description: string;
   starter: string;
   tests: string;
+  viz?: "garden";
 };
 
 const garden: Question = {
   slug: "garden-watering",
+  viz: "garden",
   title: "Garden Watering Optimization",
   difficulty: "Medium",
   tags: ["Graphs", "DFS / BFS"],
@@ -65,6 +67,12 @@ H = [5, 4, 3, 2, 1, 2, 1, 1, 1]
 - Planters \`0-1-2-3-4\` form a descending chain; planter \`5\` is a hub with three short neighbors.
 - **Part 1:** planter \`5\` waters itself + \`6, 7, 8\` → **4** planters. Answer: \`5\`.
 - **Part 2:** planter \`0\` cascades down the whole chain → **5** planters. Answer: \`0\`.
+
+### Visualize
+
+Planters are drawn at their height. Click one to water it and watch the runoff flow downhill. Everyone in the session sees the same view.
+
+<!-- viz -->
 
 ### Notes
 - The graph is undirected (if \`j\` is in \`A[i]\`, then \`i\` is in \`A[j]\`).

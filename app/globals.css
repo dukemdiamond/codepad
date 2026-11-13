@@ -13,6 +13,7 @@
   --easy: #34d399;
   --medium: #fbbf24;
   --hard: #f87171;
+  --water: #38bdf8;
   color-scheme: dark;
 }
 
@@ -131,6 +132,39 @@ code, pre { font-family: var(--font-mono), ui-monospace, Menlo, monospace; }
 
 .banner { flex: none; padding: 8px 14px; background: #7c2d12; color: #fed7aa; font-size: 13px; border-bottom: 1px solid #9a3412; }
 .banner code { background: #0003; padding: 1px 5px; border-radius: 4px; }
+
+/* ---------- garden visualizer ---------- */
+.viz { margin: 14px 0 6px; border: 1px solid var(--border); border-radius: 10px; background: var(--editor-bg); padding: 12px; }
+.viz-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 7px; overflow: hidden; }
+.seg button { background: transparent; border: none; color: var(--muted); font: inherit; font-size: 12.5px; font-weight: 600; padding: 5px 11px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button.on { background: var(--panel-2); color: var(--text); }
+.viz-check { display: inline-flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--muted); cursor: pointer; margin-left: auto; }
+.viz-svg { width: 100%; height: auto; display: block; user-select: none; }
+.viz-axis-label { font-size: 10px; fill: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.viz-tick { font-size: 10.5px; fill: var(--muted); font-family: var(--font-mono), monospace; }
+.viz-grid { stroke: #ffffff0d; stroke-dasharray: 2 4; }
+.viz-edge { stroke: #4b5263; stroke-width: 2; }
+.viz-edge.flat { stroke-dasharray: 3 4; }
+.viz-edge.flow { stroke: var(--water); stroke-width: 2.6; stroke-dasharray: 6 5; opacity: 0; animation: viz-appear .25s ease forwards, viz-flow .6s linear infinite; }
+.viz-node { cursor: pointer; }
+.viz-node circle { fill: #2c313c; stroke: #5c6370; stroke-width: 1.5; transition: stroke .15s; }
+.viz-node:hover circle { stroke: var(--text); }
+.viz-idx { font-size: 12px; font-weight: 700; fill: var(--text); pointer-events: none; font-family: var(--font-mono), monospace; }
+.viz-node.wet circle { animation: viz-wet .3s ease forwards; animation-delay: inherit; }
+.viz-node.wet .viz-idx { animation: viz-wet-text .3s ease forwards; animation-delay: inherit; }
+.viz-node.src circle { stroke: #fff; stroke-width: 2.5; }
+.viz-node.best circle { stroke: var(--medium); stroke-width: 2.5; }
+.viz-count { font-size: 10.5px; font-weight: 700; fill: var(--medium); pointer-events: none; }
+.viz-status { font-size: 13px; margin-top: 6px; min-height: 20px; }
+.viz-status .ok { color: var(--ok); font-weight: 600; }
+.viz-code { display: flex; flex-direction: column; gap: 2px; margin-top: 8px; font-size: 11.5px; color: var(--muted); overflow-x: auto; }
+.viz-code code { white-space: nowrap; }
+@keyframes viz-wet { to { fill: var(--water); stroke: #7dd3fc; } }
+@keyframes viz-wet-text { to { fill: #0b1220; } }
+@keyframes viz-appear { to { opacity: 1; } }
+@keyframes viz-flow { to { stroke-dashoffset: -11; } }
 
 /* ---------- overlays ---------- */
 .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--panel-2); border: 1px solid var(--border); padding: 10px 16px; border-radius: 8px; box-shadow: 0 8px 30px #0008; font-weight: 500; z-index: 20; }

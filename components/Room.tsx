@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as Y from "yjs";
 import CollabEditor from "./CollabEditor";
+import GardenViz from "./GardenViz";
 import { connect, pickColor, randomId, syncMisconfigured, type SyncConnection } from "@/lib/sync";
 import { PyRunner, type TestResult } from "@/lib/pyRunner";
 
@@ -14,6 +15,7 @@ export type QuestionView = {
   html: string;
   starter: string;
   tests: string;
+  viz: "garden" | null;
 };
 
 type Peer = { clientId: number; name: string; color: string; q?: string; self: boolean };
@@ -226,6 +228,7 @@ export default function Room({
     return () => runMap.unobserve(update);
   }, [runMap]);
 
+  const vizMap = useMemo(() => (conn && synced ? conn.doc.getMap<unknown>(`viz:${slug}`) : null), [conn, synced, slug]);
   const ytext = useMemo(() => conn?.doc.getText(`code:${slug}`) ?? null, [conn, slug]);
 
   const execute = useCallback(
@@ -392,7 +395,7 @@ export default function Room({
             ))}
           </div>
           <span className={`conn ${online ? "on" : "off"}`} title={conn?.backend === "liveblocks" ? "Liveblocks" : "WebSocket"}>
-            {online ? "Live" : "Connecting…"}
+            {conn?.backend === "solo" ? "Solo" : online ? "Live" : "Connecting…"}
           </span>
           <button className="btn ghost" onClick={copyLink}>
             {copied ? "Copied!" : "Copy invite link"}
@@ -402,8 +405,8 @@ export default function Room({
 
       {misconfigured && (
         <div className="banner">
-          Realtime sync isn&apos;t configured for this deployment. Set <code>NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY</code> in
-          your Vercel project&apos;s environment variables and redeploy (see README).
+          Solo mode: live collaboration isn&apos;t configured on this deployment, so others won&apos;t see your typing.
+          Set <code>NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY</code> in Vercel and redeploy to turn it on.
         </div>
       )}
 
@@ -420,7 +423,12 @@ export default function Room({
               ))}
             </div>
           </div>
-          <article className="prose" dangerouslySetInnerHTML={{ __html: q.html }} />
+          {q.html.split("<!-- viz -->").map((part, i) => (
+            <div key={`${q.slug}-${i}`}>
+              {i > 0 && q.viz === "garden" && <GardenViz shared={vizMap} />}
+              <article className="prose" dangerouslySetInnerHTML={{ __html: part }} />
+            </div>
+          ))}
         </section>
 
         <div className="splitter-x" onPointerDown={startDrag("x")} />

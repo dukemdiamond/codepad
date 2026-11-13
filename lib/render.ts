@@ -11,6 +11,7 @@ export function questionViews(): QuestionView[] {
     html: marked.parse(q.description, { async: false }) as string,
     starter: q.starter,
     tests: q.tests,
+    viz: q.viz ?? null,
   }));
 }
 

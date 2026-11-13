@@ -7,7 +7,7 @@ import type { Awareness } from "y-protocols/awareness";
 export type SyncConnection = {
   doc: Y.Doc;
   awareness: Awareness;
-  backend: "liveblocks" | "websocket";
+  backend: "liveblocks" | "websocket" | "solo";
   onSynced: (cb: () => void) => void;
   onStatus: (cb: (connected: boolean) => void) => void;
   destroy: () => void;
@@ -58,6 +58,23 @@ export async function connect(roomId: string): Promise<SyncConnection> {
       destroy: () => {
         provider.destroy();
         leave();
+        doc.destroy();
+      },
+    };
+  }
+
+  if (syncMisconfigured()) {
+    // Deployed without a sync backend: keep the pad usable for one person.
+    const { Awareness } = await import("y-protocols/awareness");
+    const awareness = new Awareness(doc);
+    return {
+      doc,
+      awareness,
+      backend: "solo",
+      onSynced: (cb) => cb(),
+      onStatus: (cb) => cb(false),
+      destroy: () => {
+        awareness.destroy();
         doc.destroy();
       },
     };
