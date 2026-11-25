@@ -57,7 +57,7 @@ code, pre { font-family: var(--font-mono), ui-monospace, Menlo, monospace; }
 /* ---------- app shell ---------- */
 .app { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 .topbar { height: 52px; flex: none; display: flex; align-items: center; gap: 16px; padding: 0 14px; border-bottom: 1px solid var(--border); background: var(--panel); }
-.qtabs { display: flex; gap: 4px; overflow-x: auto; min-width: 0; flex: 1; scrollbar-width: none; }
+.qtabs { display: flex; gap: 4px; overflow-x: auto; min-width: 0; flex: 1; scrollbar-width: thin; }
 .qtab { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 7px; border: 1px solid transparent; background: transparent; color: var(--muted); font: inherit; font-weight: 500; cursor: pointer; white-space: nowrap; }
 .qtab:hover { color: var(--text); background: var(--panel-2); }
 .qtab.active { color: var(--text); background: var(--panel-2); border-color: var(--border); }
